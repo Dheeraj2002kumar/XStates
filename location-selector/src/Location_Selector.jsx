@@ -1,4 +1,4 @@
-import './Location_Selector.css';
+import "./Location_Selector.css";
 import React, { useState, useEffect } from "react";
 
 // URL Endpoints
@@ -15,20 +15,39 @@ function LocationSelector() {
   const [selectedCountry, setSelectedCountry] = useState("");
   const [selectedState, setSelectedState] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
+  const [error, setError] = useState(""); // State for handling errors
 
   useEffect(() => {
     // Fetch all countries on initial render
     fetch(COUNTRIES_URL)
-      .then((response) => response.json())
-      .then((data) => setCountries(data));
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch countries");
+        }
+        return response.json();
+      })
+      .then((data) => setCountries(data))
+      .catch((error) => {
+        console.error("Error fetching countries:", error);
+        setError("Failed to load countries.");
+      });
   }, []);
 
   useEffect(() => {
     // Fetch states when a country is selected
     if (selectedCountry) {
       fetch(STATES_URL.replace("{countryName}", selectedCountry))
-        .then((response) => response.json())
-        .then((data) => setStates(data));
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`Failed to fetch states for ${selectedCountry}`);
+          }
+          return response.json();
+        })
+        .then((data) => setStates(data))
+        .catch((error) => {
+          console.error("Error fetching states:", error);
+          setError("Failed to load states.");
+        });
     } else {
       setStates([]);
     }
@@ -43,8 +62,17 @@ function LocationSelector() {
           selectedState
         )
       )
-        .then((response) => response.json())
-        .then((data) => setCities(data));
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`Failed to fetch cities for ${selectedState}`);
+          }
+          return response.json();
+        })
+        .then((data) => setCities(data))
+        .catch((error) => {
+          console.error("Error fetching cities:", error);
+          setError("Failed to load cities.");
+        });
     } else {
       setCities([]);
     }
@@ -54,11 +82,13 @@ function LocationSelector() {
     setSelectedCountry(event.target.value);
     setSelectedState(""); // Reset state and city
     setSelectedCity("");
+    setError(""); // Clear error on country change
   };
 
   const handleStateChange = (event) => {
     setSelectedState(event.target.value);
     setSelectedCity(""); // Reset city selection
+    setError(""); // Clear error on state change
   };
 
   const handleCityChange = (event) => {
@@ -68,7 +98,8 @@ function LocationSelector() {
   return (
     <div>
       <h1>Location Selector</h1>
-
+      {error && <p className="error-message">{error}</p>}{" "}
+      {/* Display error message */}
       <div className="dropdown-body">
         {/* Country Dropdown */}
         <div>
@@ -120,7 +151,6 @@ function LocationSelector() {
           </select>
         </div>
       </div>
-
       {/* Display the selected location */}
       {selectedCity && selectedState && selectedCountry && (
         <p className="selected-location">

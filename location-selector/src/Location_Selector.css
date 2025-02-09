@@ -1,0 +1,48 @@
+
+.dropdown-body {
+  display: flex;
+  justify-content: center; 
+  gap: 20px; 
+  margin-top: 20px;
+}
+
+
+select {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 200px;
+  appearance: none; 
+}
+
+.dropdown1{
+    width: 300px;
+}
+
+.dropdown2, .dropdown3 {
+  width: 200px;
+}
+
+select:disabled {
+  background-color: #f0f0f0;
+  color: #888;
+  cursor: not-allowed;
+}
+
+
+.selected-location {
+  font-size: 18px; 
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+.selected-city {
+  font-size: 25px;      
+}
+
+
+.selected-state, .selected-country {
+  color: rgb(128, 122, 122);    
+  font-size: 25px;     
+}

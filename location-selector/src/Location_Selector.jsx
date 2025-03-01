@@ -97,7 +97,7 @@ function LocationSelector() {
 
   return (
     <div>
-      <h1>Location Selector one</h1>
+      <h1>Location Selector</h1>
       {error && <p className="error-message">{error}</p>}{" "}
       {/* Display error message */}
       <div className="dropdown-body">
